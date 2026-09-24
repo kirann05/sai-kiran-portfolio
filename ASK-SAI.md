@@ -36,8 +36,8 @@ Future live AI would need an approved server-side service, protected credentials
 
 ## Validation
 
-Run `node work/test_hero_coder.cjs` and `node work/test_redesign.cjs` from the workspace root.
+Run `npm test` from the repository root.
 
-Passed: topic matching, follow-ups, unknown-answer handling, bounded wave/sip poses, non-overlapping gestures, static-pose invariance, no question storage/network calls, and guide JavaScript below 10 KB compressed. Browser checks passed for research follow-ups, unknown questions, pause/resume state, and no horizontal overflow at 1440, 1024, 768, and 390px widths. The revised character's wave and cup-at-mouth poses were visually inspected in the browser.
+Passed: topic matching, follow-ups, unknown-answer handling, bounded coffee poses, static-pose invariance, no question storage/network calls, and guide JavaScript below 10 KB compressed. Browser checks passed for research follow-ups, unknown questions, pause/resume state, and no horizontal overflow at 1440, 1024, 768, and 390px widths. The character's peeking, rising, and coffee poses were visually inspected in the browser.
 
 Physical devices, full screen-reader navigation, OS-level reduced-motion switching, and Lighthouse scores have not been independently tested.
