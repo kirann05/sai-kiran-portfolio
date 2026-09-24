@@ -1,0 +1,1 @@
+{"name":"minimalistic-portfolio","version":"1.0.0","private":true,"scripts":{"test":"node tests/portfolio.cjs && node tests/guide.cjs"}}
