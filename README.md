@@ -1,5 +1,7 @@
 # Minimalistic Portfolio
 
+Copyright (c) 2026 Sai Kiran. All rights reserved for original materials. Third-party licenses remain intact; see [LICENSE](LICENSE).
+
 My personal portfolio: backend engineering, applied AI research, and products I've built beyond the demo.
 
 **[Visit the portfolio](https://kirann05.github.io/sai-kiran-portfolio/)**
