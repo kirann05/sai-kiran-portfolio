@@ -24,3 +24,6 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;opacity:.028;z
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.ticker-track{flex-wrap:wrap;width:auto}.ticker-group{white-space:normal;flex-wrap:wrap;gap:18px}.ticker-group[aria-hidden]{display:none}}
 .walkthrough>video{display:block;width:100%;height:100%;object-fit:contain;background:#000}
 .project-cover-button{display:block;width:100%;padding:0;border:0;background:transparent;cursor:pointer}.project-cover-button:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.project-card:is([data-project="FitLive"],[data-project="NowServing"],[data-project="noteaid"]) .project-cover-button{width:calc(100% + 56px);margin:-28px -28px 24px;aspect-ratio:16/9;overflow:hidden;border-radius:7px 7px 0 0;flex-shrink:0}
+.project-card:is([data-project="FitLive"],[data-project="NowServing"],[data-project="noteaid"]) .project-cover{width:100%;height:100%;aspect-ratio:auto;object-fit:cover;margin:0;border:0;border-radius:0}
+.project-card[data-project="FitLive"] .project-cover{object-position:left center}

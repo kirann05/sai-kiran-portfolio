@@ -37,9 +37,11 @@ window.PROJECT_EVIDENCE = {
   });
   Object.assign(d.projects.items.find(project=>project.id==='FitLive'), {
     video:'assets/fitlive-walkthrough.mp4',
-    image:'assets/fitlive-cover.jpg',
+    image:'assets/fitlive-cover-v2.jpg',
     imageAlt:'FitLive application walkthrough',
     live:'https://kirann05.github.io/sai-kiran-portfolio/assets/fitlive-walkthrough.mp4'
   });
+  Object.assign(d.projects.items.find(project=>project.id==='NowServing'), {image:'assets/nowserving-cover-v2.jpg',imageAlt:'NowServing queue and traffic-aware departure overview'});
+  Object.assign(d.projects.items.find(project=>project.id==='noteaid'), {image:'assets/noteaid-cover-v2.jpg',imageAlt:'NoteAid healthcare research illustration'});
   window.PROJECT_EVIDENCE['deepfake-face-detection'].status='Study repository containing upstream Dessa/Square research code. Original authorship is credited in the nested README; personal extensions and new results are not asserted.';
 })();
