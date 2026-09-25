@@ -2,7 +2,7 @@
 
 My personal portfolio: backend engineering, applied AI research, and products I've built beyond the demo.
 
-**[Visit the portfolio](https://kirann05.github.io/Minimalistic-Portfolio/)**
+**[Visit the portfolio](https://kirann05.github.io/sai-kiran-portfolio/)**
 
 ![Sai Kiran's portfolio homepage](assets/homepage.png)
 
@@ -23,7 +23,8 @@ I wanted someone reviewing my work to find the important things quickly: what I 
 - Work at Morgan Stanley and Hexaware, with outcomes and technologies.
 - Healthcare AI research linked to the EMNLP paper and discussion.
 - FitLive and NowServing case studies, including an in-page walkthrough.
-- A live bakery preview, public repositories, and skill-based filtering.
+- A live bakery preview, public repositories, and role-based filtering.
+- A relevant screenshot or architecture diagram for every project.
 - Ask Sai: short career answers with supporting links.
 - A downloadable resume and direct contact options.
 
@@ -57,6 +58,8 @@ Open http://localhost:8766. Run `npm test` with Node installed; no package insta
 ## Make changes
 
 - `data.js`: biography, experience, project notes, skills, and links.
+- `project-evidence.js`: current profile facts, renamed repository links, role tracks, and source-backed case-study notes.
+- `scripts/build-project-diagrams.cjs`: generates the original architecture visuals from the project evidence.
 - `app.js`: navigation, filters, dialogs, GitHub data, and scroll effects.
 - `hero-coder.js` and `hero-coder.css`: character, monitor, and resume guide.
 - `styles.css`: typography, colors, and responsive layouts.

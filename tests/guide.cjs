@@ -6,6 +6,7 @@ const base = require('node:path').resolve(__dirname, '..') + '/';
 const context = {window:{},document:{querySelector:()=>null}};
 vm.createContext(context);
 vm.runInContext(fs.readFileSync(base+'data.js','utf8'),context);
+vm.runInContext(fs.readFileSync(base+'project-evidence.js','utf8'),context);
 const script = fs.readFileSync(base+'hero-coder.js','utf8');
 vm.runInContext(script,context);
 const {resolve,characterPose}=context.window.SAI_GUIDE;

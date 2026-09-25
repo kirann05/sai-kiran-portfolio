@@ -62,35 +62,51 @@
     const featured = data.projects.items.map(project=>{
       const repoName = data.repositoryAliases[project.id] || project.id;
       const repo = repos.find(r=>r.name.toLowerCase()===repoName.toLowerCase());
-      return {...project,repoName:repo?.name,code:repo?.html_url||project.code,stars:repo?.stargazers_count,updated:repo?.updated_at};
+      return {...project,...window.PROJECT_EVIDENCE?.[project.id],repoName:repo?.name,code:repo?.html_url||project.code,stars:repo?.stargazers_count,updated:repo?.updated_at};
     });
     const used = new Set(featured.map(p=>(p.repoName||p.id).toLowerCase()));
-    const extra = repos.filter(r=>!used.has(r.name.toLowerCase())&&!data.excludedRepos.includes(r.name)).map(repo=>({
+    const extra = repos.filter(r=>!used.has(r.name.toLowerCase())&&!data.excludedRepos.includes(r.name)&&window.PROJECT_EVIDENCE?.[r.name]).map(repo=>({
       id:repo.name,repoName:repo.name,name:repo.name.replace(/[-_]+/g,' ').trim(),
       description:repo.description || `Source code and experiments for ${repo.name.replace(/[-_]+/g,' ').trim()}.`,
       summary:repo.description || '', tech:[repo.language==='Jupyter Notebook'?'Python':repo.language,...(repo.topics||[])].filter(Boolean).slice(0,6),
       categories:repoCategories(repo),code:repo.html_url,live:safeUrl(repo.homepage)?repo.homepage:null,
-      stars:repo.stargazers_count,updated:repo.updated_at,icon:repoCategories(repo).includes('AWS')?'cloud':repo.language==='Swift'?'smartphone':'code-2',badge:'Repository',notes:[]
+      stars:repo.stargazers_count,updated:repo.updated_at,icon:repoCategories(repo).includes('AWS')?'cloud':repo.language==='Swift'?'smartphone':'code-2',badge:'Project',notes:[],...window.PROJECT_EVIDENCE[repo.name]
     }));
     const order = id => { const n=data.projects.featuredRepos.indexOf(id); return n<0?999:n; };
     return [...featured,...extra].sort((a,b)=>order(a.id)-order(b.id));
   }
   function matches(project, filter) {
     if (filter === 'All') return true;
-    return [...project.tech,...project.categories].some(tag=>tag.toLowerCase()===filter.toLowerCase());
+    return [...project.tech,...project.categories,...(project.track||[])].some(tag=>tag.toLowerCase()===filter.toLowerCase());
   }
   function projectCard(project) {
     const updated = project.updated ? new Date(project.updated).toLocaleDateString('en-US',{month:'short',year:'numeric'}) : null;
-    return `<article class="project-card" data-project="${escape(project.id)}"><div class="project-top">${icon(project.icon)}<span class="badge">${escape(project.badge)}</span></div><h3><button class="project-title" data-open="${escape(project.id)}" aria-label="Explore ${escape(project.name)}">${escape(project.name)}</button></h3><p class="project-description">${escape(project.description)}</p>${pills(project.tech.slice(0,6))}<div class="project-bottom"><div class="project-meta">${Number.isInteger(project.stars)?`<span>${icon('star')}${project.stars} ${escape(data.ui.stars)}</span>`:''}${updated?`<span>${escape(data.ui.updated)} ${escape(updated)}</span>`:''}</div><div class="project-links">${externalLink(project.code,data.ui.code)}${project.video?`<button class="text-link" data-demo="${escape(project.id)}">${escape(data.ui.demo)}${icon('play')}</button>`:externalLink(project.live,project.liveLabel||data.ui.live)}<button class="text-link detail-link" data-open="${escape(project.id)}" aria-label="${escape(data.ui.details)}: ${escape(project.name)}">${icon('plus')}</button></div></div></article>`;
+    return `<article class="project-card" data-project="${escape(project.id)}"><img class="project-cover" src="${escape(project.image||`assets/diagrams/${project.id}.svg`)}" alt="${escape(project.imageAlt||`${project.name} architecture overview`)}" width="960" height="480" loading="lazy"><div class="project-top">${icon(project.icon)}<span class="badge">${escape(project.badge)}</span></div><h3><button class="project-title" data-open="${escape(project.id)}" aria-label="Explore ${escape(project.name)}">${escape(project.name)}</button></h3><p class="project-description">${escape(project.description)}</p>${pills(project.tech.slice(0,6))}<div class="project-bottom"><div class="project-meta">${Number.isInteger(project.stars)&&project.stars>0?`<span>${icon('star')}${project.stars} ${escape(data.ui.stars)}</span>`:''}${updated?`<span>${escape(data.ui.updated)} ${escape(updated)}</span>`:''}</div><div class="project-links">${externalLink(project.code,data.ui.code)}${project.video?`<button class="text-link" data-demo="${escape(project.id)}">${escape(data.ui.demo)}${icon('play')}</button>`:externalLink(project.live,project.liveLabel||data.ui.live)}<button class="text-link detail-link" data-open="${escape(project.id)}" aria-label="${escape(data.ui.details)}: ${escape(project.name)}">${icon('plus')}</button></div></div></article>`;
   }
   function updateProjectGrid(animate=false) {
     const grid = document.querySelector('#project-grid');
     const oldRects = new Map([...grid.children].map(el=>[el.dataset.project,el.getBoundingClientRect()]));
     const visible = state.projects.filter(p=>matches(p,state.filter));
-    grid.innerHTML = visible.length ? visible.map(projectCard).join('') : `<div class="empty"><p>${escape(data.ui.empty)}</p><button class="button" data-reset>${escape(data.ui.reset)}</button></div>`;
+    grid.innerHTML = visible.length ? visible.filter(p=>!p.additional).map(projectCard).join('')+(visible.some(p=>p.additional)?`<h3 class="additional-heading">Additional Experiments</h3>`+visible.filter(p=>p.additional).map(projectCard).join(''):'') : `<div class="empty"><p>${escape(data.ui.empty)}</p><button class="button" data-reset>${escape(data.ui.reset)}</button></div>`;
     document.querySelectorAll('[data-filter]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.filter===state.filter)));
     document.querySelector('#filter-result').textContent = `${visible.length} projects`;
     document.querySelector('#project-status').textContent = state.filter==='All'?state.source:state.filter;
+    const trackNotes = {
+      'Backend Engineering':'Morgan Stanley: Java services, ETL, and AWS integrations. Hexaware: real-time API delivery.',
+      'Full-Stack Engineering':'Hexaware: React/TypeScript dashboards and WebSocket updates. Personal products: NowServing and FitLive.',
+      'Applied AI':'Morgan Stanley: agent-enabled engineering workflows. University of Massachusetts: patient-education research and EMNLP publication.'
+    };
+    let trackNote = document.querySelector('#track-experience');
+    if (!trackNote && document.createElement) {
+      trackNote = document.createElement('p');
+      trackNote.id = 'track-experience';
+      trackNote.className = 'section-intro';
+      grid.before(trackNote);
+    }
+    if (trackNote) {
+      trackNote.hidden = !trackNotes[state.filter];
+      trackNote.innerHTML = trackNotes[state.filter] ? `${escape(trackNotes[state.filter])} <a href="#experience">Read experience</a>` : '';
+    }
     icons();
     if(revealObserver&&!reducedMotion.matches) grid.querySelectorAll('.project-card').forEach(card=>{
       card.classList.add('reveal');
@@ -108,13 +124,21 @@
     const project = state.projects.find(p=>p.id===id);
     if(!project) return;
     dialogTrigger=trigger;
-    dialog.innerHTML = `<div class="dialog-header"><h2 id="dialog-title">${escape(project.name)}</h2><button class="icon-button" data-close aria-label="${data.ui.close}">${icon('x')}</button></div><div class="dialog-body">${project.video?`<div class="walkthrough" id="modal-video"><img src="${escape(project.image)}" alt="${escape(project.imageAlt)}" width="800" height="450"><button class="button primary walkthrough-play" data-play="${escape(project.video)}">${icon('play')}${escape(data.ui.play)}</button></div>`:project.image?`<img src="${escape(project.image)}" alt="${escape(project.imageAlt)}" width="800" height="440">`:''}<p>${escape(project.summary||project.description)}</p>${pills(project.tech)}${project.architecture?`<h3>${escape(data.ui.architecture)}</h3><div class="architecture">${project.architecture.map(([name,value])=>`<div><strong>${escape(name)}</strong><span>${escape(value)}</span></div>`).join('')}</div>`:''}${project.notes?.length?`<h3>${escape(data.ui.notes)}</h3>${project.notes.map(note=>`<p>${escape(note)}</p>`).join('')}`:''}${project.embed?`<iframe class="embed-frame" src="${escape(project.embed)}" title="Shris Bakery live website" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" referrerpolicy="strict-origin-when-cross-origin"></iframe>`:''}<div class="actions">${externalLink(project.code,data.ui.code)}${externalLink(project.live,project.video?data.ui.watchExternal:(project.liveLabel||data.ui.live))}${externalLink(project.discussion,data.ui.discussion)}</div>${project.repoName?`<h3>${escape(data.ui.readme)}</h3><pre class="readme" id="readme-content">${escape(data.ui.readmeLoading)}</pre>`:''}</div>`;
+    dialog.innerHTML = `<div class="dialog-header"><h2 id="dialog-title">${escape(project.name)}</h2><button class="icon-button" data-close aria-label="${data.ui.close}">${icon('x')}</button></div><div class="dialog-body">${project.video?`<div class="walkthrough" id="modal-video"><img src="${escape(project.image)}" alt="${escape(project.imageAlt)}" width="800" height="450"><button class="button primary walkthrough-play" data-play="${escape(project.video)}">${icon('play')}${escape(data.ui.play)}</button></div>`:project.image?`<img src="${escape(project.image)}" alt="${escape(project.imageAlt)}" width="800" height="440">`:`<img src="assets/diagrams/${escape(project.id)}.svg" alt="${escape(project.name)} architecture overview" width="960" height="480">`}<p>${escape(project.summary||project.description)}</p>${project.problem?`<div class="case-study"><h3>Problem</h3><p>${escape(project.problem)}</p><h3>Decision and trade-off</h3><p>${escape(project.decision)}</p><h3>Current status</h3><p>${escape(project.status)}</p>${externalLink(project.evidenceUrl||project.code,'Source and evidence')}</div>`:''}${pills(project.tech)}${project.architecture?`<h3>${escape(data.ui.architecture)}</h3><div class="architecture">${project.architecture.map(([name,value])=>`<div><strong>${escape(name)}</strong><span>${escape(value)}</span></div>`).join('')}</div>`:''}${project.notes?.length?`<h3>${escape(data.ui.notes)}</h3>${project.notes.map(note=>`<p>${escape(note)}</p>`).join('')}`:''}${project.embed?`<iframe class="embed-frame" src="${escape(project.embed)}" title="Shris Bakery live website" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" referrerpolicy="strict-origin-when-cross-origin"></iframe>`:''}<div class="actions">${externalLink(project.code,data.ui.code)}${externalLink(project.live,project.video?data.ui.watchExternal:(project.liveLabel||data.ui.live))}${externalLink(project.discussion,data.ui.discussion)}</div>${project.repoName?`<h3>${escape(data.ui.readme)}</h3><pre class="readme" id="readme-content">${escape(data.ui.readmeLoading)}</pre>`:''}</div>`;
     dialog.showModal();dialog.scrollTop=0;document.body.classList.add('dialog-open');icons();
     if(autoplay&&project.video) playWalkthrough(project.video);
     if(project.repoName) fetchReadme(project.repoName);
   }
   function playWalkthrough(videoId) {
     const container=dialog.querySelector('#modal-video');
+    if(container&&videoId==='assets/fitlive-walkthrough.mp4') {
+      container.innerHTML='<video controls playsinline preload="metadata" aria-label="FitLive walkthrough" poster="assets/fitlive-cover.jpg"><source src="assets/fitlive-walkthrough.mp4" type="video/mp4">Your browser cannot play this video. <a href="assets/fitlive-walkthrough.mp4">Open the walkthrough</a>.</video>';
+      const video=container.querySelector('video');
+      video.play().catch(()=>{ /* Native controls remain available if playback is blocked. */ });
+      dialog.scrollTop=0;
+      video.focus({preventScroll:true});
+      return;
+    }
     if(!container||!/^[a-zA-Z0-9_-]{11}$/.test(videoId)) return;
     container.innerHTML=`<iframe title="NowServing walkthrough" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&mute=1&playsinline=1&rel=0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
     // Replace the poster in place so playback never opens below the visible content.
@@ -139,7 +163,7 @@
     finally {clearTimeout(timeout);}
   }
   async function fetchGithubRepos() {
-    const cacheKey=`portfolio-v2-repos-${data.githubUsername}`;
+    const cacheKey=`portfolio-v3-repos-${data.githubUsername}`;
     let cached;
     try { cached=JSON.parse(localStorage.getItem(cacheKey)); } catch { cached=null; }
     if(cached&&Date.now()-cached.time>=0&&Date.now()-cached.time<3600000&&validRepositories(cached.repos)) {
@@ -161,7 +185,10 @@
   }
   function applyRepositories(repos,source) {
     state.projects=mergeRepositories(repos);state.source=source;updateProjectGrid();
-    document.querySelector('#repo-count').textContent=String(repos.filter(r=>!r.fork&&!r.archived).length)+(repos.length===100?'+':'');
+    if(document.querySelector('#repo-count'))document.querySelector('#repo-count').textContent=String(repos.filter(r=>!r.fork&&!r.archived).length)+(repos.length===100?'+':'');
+    let metadata=document.querySelector('#portfolio-schema');
+    if(!metadata){metadata=document.createElement('script');metadata.id='portfolio-schema';metadata.type='application/ld+json';document.head.append(metadata);}
+    metadata.textContent=JSON.stringify({'@context':'https://schema.org','@graph':[{'@type':'Person','@id':'https://kirann05.github.io/sai-kiran-portfolio/#person',name:data.name,url:'https://kirann05.github.io/sai-kiran-portfolio/',jobTitle:data.experience.items[0].role,worksFor:{'@type':'Organization',name:'Morgan Stanley'},homeLocation:{'@type':'Place',name:data.location},sameAs:[data.github,data.linkedin]},...state.projects.filter(p=>safeUrl(p.code)).map(p=>({'@type':'SoftwareSourceCode',name:p.name,codeRepository:p.code,description:p.description,programmingLanguage:p.tech}))]});
   }
   function initNavigation() {
     const nav=document.querySelector('.nav'),menu=document.querySelector('#mobile-menu'),trigger=document.querySelector('.menu-button');
