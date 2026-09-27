@@ -4,7 +4,7 @@ window.PORTFOLIO = {
   excludedRepos: ['kirann05', 'Portfolio', 'Minimalistic-Portfolio'],
   repositoryCategories: {'Cloud-Based-3-Tier-Architecture-Project-':['AWS','Node.js','Full-stack'],'RealTime-FakeNews-Detector-RFD-':['Python','AI/ML'],'gpt2-systems-training':['Python','AI/ML'],'Deepfake-Face-Detection':['Python','AI/ML'],'Social-Determinants-of-Health-Through-NLP':['Python','AI/ML'],'Multiclass-Noisy-Text-Classification':['Python','AI/ML'],'To-Do-List-Django-':['Python','Full-stack']},
   name: 'Sai Kiran', monogram: 'SK', githubUsername: 'kirann05',
-  email: 'kirangandluri1@gmail.com',
+  email: 'kiranga512@gmail.com',
   github: 'https://github.com/kirann05',
   linkedin: 'https://linkedin.com/in/kiran-gandluri-31670327b/',
   resume: 'assets/Sai-Kiran-Resume.pdf',
@@ -23,7 +23,7 @@ window.PORTFOLIO = {
       'At Morgan Stanley, I work across Java services, data pipelines, and agentic AI on AWS. Before that, I researched patient-facing language models at University of Massachusetts and built real-time network-management dashboards at Hexaware.',
       'My own products explore the same idea at a smaller scale: help someone make a better decision. FitLive connects training, food, and recovery. NowServing turns a place in line into a plan for when to leave.'
     ],
-    info:[{icon:'briefcase-business',label:'Current',value:'Software Engineer, AI / Morgan Stanley'},{icon:'graduation-cap',label:'Education',value:'MS Computer Science / University of Massachusetts'},{icon:'book-open',label:'Research',value:'Healthcare AI / EMNLP 2025'},{icon:'mail',label:'Email',value:'kirangandluri1@gmail.com'},{icon:'message-circle',label:'Status',value:'Open to opportunities'}]
+    info:[{icon:'briefcase-business',label:'Current',value:'Software Engineer, AI / Morgan Stanley'},{icon:'graduation-cap',label:'Education',value:'MS Computer Science / University of Massachusetts'},{icon:'book-open',label:'Research',value:'Healthcare AI / EMNLP 2025'},{icon:'mail',label:'Email',value:'kiranga512@gmail.com'},{icon:'message-circle',label:'Status',value:'Open to opportunities'}]
   },
   experience: {
     label:'Experience',title:"Where I've",italic:'worked.',
