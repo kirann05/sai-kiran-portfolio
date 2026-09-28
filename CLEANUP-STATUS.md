@@ -4,7 +4,7 @@ Updated September 25, 2026.
 
 ## Implemented
 
-- Name: Sai Kiran. Location: Seattle. Current title: Software Engineer II, AI.
+- Name: Sai Kiran. Location: Seattle. Current title: Software Engineer - Gen AI.
 - Removed the headline years-of-experience count while employment dates are reconciled.
 - Renamed the repositories and archived the private legacy portfolio.
 - Updated GitHub profile text, repository descriptions, and topics.

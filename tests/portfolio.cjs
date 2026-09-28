@@ -29,7 +29,7 @@ assert(projects.filter(p=>matches(p,'Python')).length>1);
 assert(projects.every(p=>matches(p,'All')));
 assert(projects.filter(p=>matches(p,'Applied AI')).length>=4);
 assert.equal(data.location,'Seattle');
-assert.equal(data.experience.items[0].role,'Software Engineer II, AI');
+assert.equal(data.experience.items[0].role,'Software Engineer - Gen AI');
 for(const project of projects)assert(fs.existsSync(root+'assets/diagrams/'+project.id+'.svg'));
 assert(!safeUrl('javascript:alert(1)'));
 assert(!safeUrl('http://example.com'));

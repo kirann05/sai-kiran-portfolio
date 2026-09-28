@@ -20,10 +20,10 @@ window.PROJECT_EVIDENCE = {
   d.name='Sai Kiran';d.location='Seattle';
   d.ui.watchExternal='Open video';
   d.hero.status='Open to opportunities / Seattle';
-  d.hero.bio='I build reliable Java/Spring Boot services, React/TypeScript products, and AI-enabled engineering tools on AWS. Software Engineer II, AI at Morgan Stanley. Published in Findings of EMNLP 2025.';
+  d.hero.bio='I build reliable Java/Spring Boot services, React/TypeScript products, and AI-enabled engineering tools on AWS. Software Engineer - Gen AI at Morgan Stanley. Published in Findings of EMNLP 2025.';
   d.hero.stats=[{value:'Backend',label:'Java / Spring Boot'},{value:'Full-stack',label:'React / TypeScript'},{value:'Applied AI',label:'EMNLP 2025 research'}];
-  d.experience.items[0].role='Software Engineer II, AI';
-  d.about.info[0].value='Software Engineer II, AI / Morgan Stanley';
+  d.experience.items[0].role='Software Engineer - Gen AI';
+  d.about.info[0].value='Software Engineer - Gen AI / Morgan Stanley';
   d.about.info.push({icon:'map-pin',label:'Location',value:'Seattle'});
   d.repositoryAliases=Object.fromEntries(Object.entries(window.PROJECT_EVIDENCE).map(([id,p])=>[id,p.repo]));
   d.excludedRepos=['kirann05','portfolio-legacy','sai-kiran-portfolio','Portfolio','Minimalistic-Portfolio','kiran-Portfolio'];
